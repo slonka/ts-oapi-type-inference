@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",                  // keep your current module setting
+    "moduleResolution": "Bundler",       // keep your current module resolution
+    "noUncheckedIndexedAccess": true,    // keep your current strictness
+    "target": "ES2017",                  // needed for async/await
+    "lib": ["ES2017", "DOM"],            // include Promise and fetch types
+    "strict": true,                       // optional but recommended
+    "esModuleInterop": true               // optional, for better module compatibility
+  }
+}

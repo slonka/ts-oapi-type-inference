@@ -1,0 +1,63 @@
+openapi: 3.1.0
+info:
+  title: Root Endpoint API
+  version: 1.0.0
+
+paths:
+  /:
+    get:
+      summary: Get root resource
+      operationId: getRoot
+      responses:
+        '200':
+          description: Successful response with one of multiple types
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+
+components:
+  schemas:
+    BaseResponse:
+      oneOf:
+        - $ref: '#/components/schemas/UserResponse'
+        - $ref: '#/components/schemas/AdminResponse'
+      discriminator:
+        propertyName: type
+        mapping:
+          user: '#/components/schemas/UserResponse'
+          admin: '#/components/schemas/AdminResponse'
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Discriminator for response type (user or admin)
+          enum: [user, admin]
+
+    UserResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [user]
+        username:
+          type: string
+        email:
+          type: string
+      required: [type, username, email]
+
+    AdminResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [admin]
+        admin_id:
+          type: integer
+        permissions:
+          type: array
+          items:
+            type: string
+      required: [type, admin_id, permissions]
