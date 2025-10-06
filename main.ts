@@ -23,10 +23,19 @@ async function fetchEntity<T extends EntityURL>(url: T): Promise<ResponseForURL<
   return res.json() as Promise<ResponseForURL<T>>;
 }
 
-// Usage
+// Read URL from command line arguments
+const arg = process.argv[2];
+if (!arg) {
+  console.error("Usage: ts-node main.ts <url>");
+  process.exit(1);
+}
+
+// Type assertion to satisfy TypeScript
+const url = arg as EntityURL;
+
 async function run() {
-  const user = await fetchEntity("/_kri/kri_user_mesh-1_zone-uni__backend_8080");
-  console.log("User:", user.username, user.email); // TypeScript infers UserResponse
+  const user = await fetchEntity(url);
+  console.log("Response:", user);
 }
 
 run().catch(console.error);

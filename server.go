@@ -14,6 +14,13 @@ type UserResponse struct {
 	Email    string `json:"email"`
 }
 
+// AdminResponse struct
+type AdminResponse struct {
+	Type        string   `json:"type"`
+	AdminID     int      `json:"admin_id"`
+	Permissions []string `json:"permissions"`
+}
+
 func kriHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -24,17 +31,18 @@ func kriHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Remove prefix "/_kri/"
 	idPart := strings.TrimPrefix(path, "/_kri/")
 
-	// Extract key after "kri_" and before next underscore
+	// Extract the key after "kri_" and before next underscore
 	if !strings.HasPrefix(idPart, "kri_") {
 		http.Error(w, "Invalid entity URL format", http.StatusBadRequest)
 		return
 	}
 
-	keyPart := strings.Split(strings.TrimPrefix(idPart, "kri_"), "_")[0]
+	key := strings.Split(strings.TrimPrefix(idPart, "kri_"), "_")[0]
 
-	switch keyPart {
+	switch key {
 	case "user":
 		resp := UserResponse{
 			Type:     "user",
@@ -42,6 +50,15 @@ func kriHandler(w http.ResponseWriter, r *http.Request) {
 			Email:    "johndoe@example.com",
 		}
 		json.NewEncoder(w).Encode(resp)
+
+	case "admin":
+		resp := AdminResponse{
+			Type:        "admin",
+			AdminID:     42,
+			Permissions: []string{"read", "write", "delete"},
+		}
+		json.NewEncoder(w).Encode(resp)
+
 	default:
 		http.Error(w, "Entity not found", http.StatusNotFound)
 	}
