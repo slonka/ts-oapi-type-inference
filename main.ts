@@ -34,8 +34,8 @@ if (!arg) {
 const url = arg as EntityURL;
 
 async function run() {
-  const user = await fetchEntity(url);
-  console.log("Response:", user);
+  const entity = await fetchEntity(url);
+  console.log("Response:", entity);
 }
 
 run().catch(console.error);
